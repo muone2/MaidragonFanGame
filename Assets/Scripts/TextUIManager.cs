@@ -22,7 +22,11 @@ public class TextUIManager : MonoBehaviour
     }
 
     public Text energyText;
-    int energy = 0;
+    public GameObject TextEffectPrefeb;
+
+    public int slotUseCount = 0;
+    public int energy = 0;
+    GameObject tmp;
 
     public void AddEnergy(int slotScore)
     {
@@ -32,18 +36,39 @@ public class TextUIManager : MonoBehaviour
 
     public void changeEnergyText()
     {
-        if (energy < 10)
-            energyText.text = "energy : 00" + energy;
+        if (energy < -100)
+            energyText.text = "Energy : -99" + "\n" + "Count : " + slotUseCount;
+        else if (energy < -10)
+            energyText.text = "Energy : -" + (-energy) + "\n" + "Count : " + slotUseCount;
+        else if (energy < 0)
+            energyText.text = "Energy : -0" + (-energy) + "\n" + "Count : " + slotUseCount;
+        else if (energy < 10)
+            energyText.text = "Energy : 00" + energy + "\n" + "Count : " + slotUseCount;
         else if (energy < 100)
-            energyText.text = "energy : 0" + energy;
-        else if (energy < 1000)
-            energyText.text = "energy : " + energy;
-        else if (energy >= 1000)
-            energyText.text = "energy : 999";
+            energyText.text = "Energy : 0" + energy + "\n" + "Count : " + slotUseCount;
+        else
+            energyText.text = "Energy : " + energy + "\n" + "Count : " + slotUseCount;
     }
 
+    public void makeTextEffectSlotScore(GameObject targetObj, int score)
+    {
+        tmp = Instantiate(TextEffectPrefeb);
 
+        if (score < -10) //음수일 때
+            tmp.GetComponent<Text>().text = "-" + (-score);
+        else if (score < 0) //음수일 때
+            tmp.GetComponent<Text>().text = "-0" + (-score);
+        else if (score < 10)
+            tmp.GetComponent<Text>().text = "+0" + score;
+        else if (score < 100)
+            tmp.GetComponent<Text>().text = "+" + score;
+        else
+            tmp.GetComponent<Text>().text = "+er";
+        tmp.transform.parent = targetObj.transform;
+        tmp.transform.localPosition = Vector3.zero;
+        tmp.transform.parent = gameObject.transform; //버튼의 밑이면 버튼 마스크에도 영향 받아서 바꿈
+        tmp.transform.localScale = Vector3.one;  //다른 곳에서 와서 그런지 로컬 스케일이 바뀌길래 강제 초기화
 
-
-
+        //얘는 자체 코드에서 알아서 움직이고 알아서 삭제 될 것
+    }
 }
