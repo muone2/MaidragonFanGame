@@ -23,6 +23,7 @@ public class TextUIManager : MonoBehaviour
 
     public Text energyText;
     public GameObject TextEffectPrefeb;
+    public GameObject slotMachineManagerObj;
 
     public int slotUseCount = 0;
     public int energy = 0;
@@ -64,9 +65,10 @@ public class TextUIManager : MonoBehaviour
             tmp.GetComponent<Text>().text = "+" + score;
         else
             tmp.GetComponent<Text>().text = "+er";
+
         tmp.transform.parent = targetObj.transform;
         tmp.transform.localPosition = Vector3.zero;
-        tmp.transform.parent = gameObject.transform; //버튼의 밑이면 버튼 마스크에도 영향 받아서 바꿈
+        tmp.transform.parent = slotMachineManagerObj.transform; //버튼의 밑이면 버튼 마스크에도 영향 받아서 바꿈
         tmp.transform.localScale = Vector3.one;  //다른 곳에서 와서 그런지 로컬 스케일이 바뀌길래 강제 초기화
 
         //얘는 자체 코드에서 알아서 움직이고 알아서 삭제 될 것

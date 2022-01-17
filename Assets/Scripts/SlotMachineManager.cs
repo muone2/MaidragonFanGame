@@ -7,8 +7,9 @@ using UnityEngine.UI;
 public class SlotMachineManager : MonoBehaviour
 {
     public GameObject[] slotMovingObj; //실제로 움직일 슬롯 오브젝트
-    public Button[] slot;  //슬롯인데 누를 수도 있긴 함.
+    public Button[] slot;  //슬롯인데 버튼으로 만들었고, 못 누르게 막아놨음.
     public Button SlotButton; //이건 슬롯하는 버튼
+    public Button itemBoxButton; //아이템 상자 여는 버튼
 
     public Sprite[] itemSprite; //미리 지정해두는 아이템 아이콘, 0이 꽝이다.
     public List<Sprite> itemBackpack = new List<Sprite>();//현재 가지고 있는 아이템들 (즉, 가방) 0도 포함된다.
@@ -23,28 +24,31 @@ public class SlotMachineManager : MonoBehaviour
 
     public Image displayResultImage; //화면에 보여줄 결과 이미지
 
-
-    public int[,] resultIndexArray = new int[3, 3]; //당첨된 것의 정보를 저장할 배열 (무조건 3,3일 예정)
+    public int[,] resultIndexArray;  //당첨된 것의 정보를 저장할 배열. 스타트에서 초기화 해줌
 
     int itemCountInOneSlot;  //슬롯에 올라간 총 아이템 갯수
     int itemCount = 0; //현재 가지고 있는 아이템 수
     int randomIndex;
 
     int[] answer = { 0, 0, 0 }; //내가 지정해둔 정보
+    float[] moveDistance = { 5f , 10f , 12.5f , 20f }; //가능한 숫자(2.5 / 5 / 10 / 12.5 / 20 / 25 / 50 /100)중 자연스러운 것만
     public List<int> choiceNum = new List<int>();
     bool isScoreZero = true;
 
     public GameObject itemShopPanel;
+    public GameObject itemBoxPanel;
 
     // Start is called before the first frame update
     void Start()
     {
         itemCountInOneSlot = displayItemSlots[0].itemImage.Count - 3; //3개는 이미지 용이라서 사실 허상임.
+        resultIndexArray = new int[slot.Length, itemCountInOneSlot]; //이거 현재는 3이랑 5다.
+
         for (int x = 0; x < slot.Length; x++)   //슬롯 갯수만큼 반복
         {
-            for (int y = 0; y < itemCountInOneSlot; y++)
+            for (int y = 0; y < displayItemSlots[0].itemImage.Count; y++)
             {
-                displayItemSlots[x].itemImage[y].sprite = itemSprite[0]; //모든 칸을 점으로
+                displayItemSlots[x].itemImage[y].sprite = itemSprite[0]; //허상 포함 모든 칸을 점으로
             }
         }
         for (int i = 0; i < itemBackpack.Count; i++)  //가방 칸 갯수만큼 랜덤값 넣을 칸 생성
@@ -64,6 +68,8 @@ public class SlotMachineManager : MonoBehaviour
         TextUIManager.instance.changeEnergyText(); //슬롯 사용 횟수 증가, ui갱신
 
         SlotButton.interactable = false; //슬롯 시작되면 버튼 클릭 불가.
+        itemBoxButton.interactable = false; //마찬가지로 슬롯 도중은 클릭 불가
+
         choiceNum.Clear(); //중복확인용 리스트 초기화.
         for (int i = 0; i < slot.Length; i++)   //슬롯 갯수만큼 반복
         {
@@ -84,14 +90,9 @@ public class SlotMachineManager : MonoBehaviour
                         a=1001; //반복문 탈출
                     }
                 }
-               // Debug.Log(randomIndex);
 
-                if (j <= 2) //당첨이 3*3개
-                {
-                    resultIndexArray[i, j] = randomIndex; //선택된 가방위치가 무엇인지 결과 리스트에 저장 (총 슬롯 갯수만큼 저장 됨)
-                    displayItemSlots[i].itemImage[j + itemCountInOneSlot].sprite = itemBackpack[randomIndex]; //처음 그림들과 마지막 그림들을 같게 해줄 코드
-                }
-                displayItemSlots[i].itemImage[j].sprite = itemBackpack[randomIndex]; //슬롯에 해당 이미지를 출력
+                resultIndexArray[i, j] = randomIndex; //선택된 가방 위치가 무엇인지 결과 배열에 저장 (총 슬롯 갯수만큼 저장 됨)
+                
             }
         }
 
@@ -103,18 +104,40 @@ public class SlotMachineManager : MonoBehaviour
 
     IEnumerator StartSlot(int slotIndex) //몇번째 슬롯인가
     {
-        for (int i = 0; i < (itemCountInOneSlot * (2 + slotIndex) + answer[slotIndex]) * 4; i++)
+        if (true) //원래 다른 거 있었는데 없앰.
         {
-            slotMovingObj[slotIndex].transform.localPosition -= new Vector3(0, 25f, 0);  //ui컴포넌트가 운직이는 거라서 로컬 포지션 사용
-            if (slotMovingObj[slotIndex].transform.localPosition.y < 100f)
+            int randNum = Random.Range(0, moveDistance.Length);
+
+            yield return new WaitForSeconds( (1.4f / (slot.Length - 1)) * slotIndex); //0.5곱하기 슬롯 번호만큼 쉼. 즉 0번이면 0초
+
+            // for (int i = 0; i < (itemCountInOneSlot * (2 + slotIndex) + answer[slotIndex]) * 4; i++)
+            for (int i = 0; i < 200; i++)
             {
-                slotMovingObj[slotIndex].transform.localPosition += new Vector3(0, 500f, 0);
+                slotMovingObj[slotIndex].transform.localPosition -= new Vector3(0, moveDistance[randNum], 0);  //ui컴포넌트가 운직이는 거라서 로컬 포지션 사용
+
+                if (slotMovingObj[slotIndex].transform.localPosition.y < 100f)
+                {
+                    slotMovingObj[slotIndex].transform.localPosition += new Vector3(0, 500f, 0); //위치가 575가 된다.
+                    for (int a = 0; a < itemCountInOneSlot; a++)
+                    {
+                        displayItemSlots[slotIndex].itemImage[a].sprite = itemBackpack[resultIndexArray[slotIndex, a]]; //지금 안 보이는 5개 바로 바꿔주기
+                    }
+                }
+                else if (slotMovingObj[slotIndex].transform.localPosition.y < 200f) //100보다는 큰데 200보다는 작은 순간. (잘 모르지만 아무튼 허상은 안 보이는 중)
+                {
+                    for (int a = 0; a < displayItemSlots[0].itemImage.Count - itemCountInOneSlot; a++) //이건 한 라인당 당첨슬롯 갯수다.
+                    {
+                        displayItemSlots[slotIndex].itemImage[a + itemCountInOneSlot].sprite = itemBackpack[resultIndexArray[slotIndex, a]]; //처음 그림들과 마지막 그림들을 같게 해줄 코드
+                    }
+                }
+                yield return new WaitForSeconds(0.03f);  //슬롯은 각각 4초 돌 듯
             }
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds((1.4f / (slot.Length - 1)) * (slot.Length - slotIndex)); //0번이면 0.5곱하기 (2-0), 즉 1초 쉰다.
         }
+
         if (slotIndex == slot.Length - 1)
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(0.2f);
             checkAllResultSlotIsItem();  //전체를 본 후에 칸 별로 계산하기 위해 굳이 이렇게 함. 아이템별로 해야할 듯.
             if (isScoreZero == false)
                 yield return new WaitForSeconds(1.0f);
@@ -146,14 +169,20 @@ public class SlotMachineManager : MonoBehaviour
 
             yield return new WaitForSeconds(1.1f); //좀 더 기다린 후에 엔드 엑션
             itemShopPanel.SetActive(true);
-            SlotButton.interactable = true; //패널이 켜진 다음 버튼도 온
+            SlotButton.interactable = true; //패널이 켜진 다음 버튼 클릭 다시 가능
+            itemBoxButton.interactable = true;
         }
     }
 
-    public void ClickButton (int index)
+    public void ClickButton (int slotNum, int imageNum)
     {
-        displayResultImage.sprite = itemBackpack[resultIndexArray[index,0]];
+        displayResultImage.sprite = itemBackpack[resultIndexArray[slotNum, imageNum]];
     }
+    public void ClickitemBoxButton()
+    {
+        itemBoxPanel.SetActive(true);
+    }
+
 
     public void AddItemByButton(int num) //num은 아이템 번호
     {
@@ -176,11 +205,10 @@ public class SlotMachineManager : MonoBehaviour
         isScoreZero = true;
         for (int i = 0; i < slot.Length; i++)   //슬롯 갯수만큼 반복
         {
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 3; j++)  //결과는 3~5지만, 결과는 3까지만 계산
             {
                 if (itemInfoBackpack[resultIndexArray[i, j]] > 0) //아이템 번호가 0이 아니면
                 {
-                    Debug.Log("afa");
                     AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, 1);
                 }
             }
