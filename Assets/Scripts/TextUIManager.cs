@@ -22,21 +22,30 @@ public class TextUIManager : MonoBehaviour
     }
 
     public Text energyText;
+    public Text heartText;
     public GameObject TextEffectPrefeb;
     public GameObject slotMachineManagerObj;
 
-    public int slotUseCount = 0;
-    public int energy = 0;
     GameObject tmp;
 
     public void AddEnergy(int slotScore)
     {
-        energy += slotScore;
+        StageInfoManager.instance.energy += slotScore;
         changeEnergyText();
+        EnergySlider.instance.ChangeEnergyBar();
+    }
+    public void AddSlotUseCount()
+    {
+        StageInfoManager.instance.slotUseCount += 1;
+        changeHeartText();
     }
 
     public void changeEnergyText()
     {
+
+        energyText.text = StageInfoManager.instance.energy + " / " + StageInfoManager.instance.StageEnergy[StageInfoManager.instance.stageCount];
+
+        /*
         if (energy < -100)
             energyText.text = "Energy : -99" + "\n" + "Count : " + slotUseCount;
         else if (energy < -10)
@@ -49,6 +58,14 @@ public class TextUIManager : MonoBehaviour
             energyText.text = "Energy : 0" + energy + "\n" + "Count : " + slotUseCount;
         else
             energyText.text = "Energy : " + energy + "\n" + "Count : " + slotUseCount;
+         */
+    }
+
+
+    public void changeHeartText()
+    {
+        heartText.text = (StageInfoManager.instance.StageHeart[StageInfoManager.instance.stageCount] - StageInfoManager.instance.slotUseCount) + 
+            " / " + StageInfoManager.instance.StageHeart[StageInfoManager.instance.stageCount];
     }
 
     public void makeTextEffectSlotScore(GameObject targetObj, int score)
@@ -63,8 +80,6 @@ public class TextUIManager : MonoBehaviour
             tmp.GetComponent<Text>().text = "+0" + score;
         else if (score < 100)
             tmp.GetComponent<Text>().text = "+" + score;
-        else
-            tmp.GetComponent<Text>().text = "+er";
 
         tmp.transform.parent = targetObj.transform;
         tmp.transform.localPosition = Vector3.zero;

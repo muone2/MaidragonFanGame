@@ -33,6 +33,7 @@ public class ItemBoxBlockClick : MonoBehaviour
         infoGroup.transform.localPosition = Vector3.zero; //조정
         infoGroup.transform.localScale = Vector3.one;
 
+        SoundManager.instance.ButtonSoundPlay(); //버튼 사운드 재생
         infoOn = true;
     }
 

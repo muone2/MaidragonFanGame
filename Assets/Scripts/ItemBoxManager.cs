@@ -56,6 +56,7 @@ public class ItemBoxManager : MonoBehaviour
         }
         itemlistInBackpackPanel.Clear();
 
+        SoundManager.instance.ButtonSoundPlay(); //버튼 사운드 재생
         gameObject.SetActive(false);
     }
 }

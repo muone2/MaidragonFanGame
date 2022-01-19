@@ -31,7 +31,7 @@ public class SlotMachineManager : MonoBehaviour
     int randomIndex;
 
     int[] answer = { 0, 0, 0 }; //내가 지정해둔 정보
-    float[] moveDistance = { 5f , 10f , 12.5f , 20f }; //가능한 숫자(2.5 / 5 / 10 / 12.5 / 20 / 25 / 50 /100)중 자연스러운 것만
+    float[] moveDistance = { 20f, 25f, 50f }; //가능한 숫자(2.5 / 5 / 10 / 12.5 / 20 / 25 / 50 /100)중 자연스러운 것만
     public List<int> choiceNum = new List<int>();
     bool isScoreZero = true;
 
@@ -41,6 +41,10 @@ public class SlotMachineManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        TextUIManager.instance.changeEnergyText(); //슬롯 사용 횟수 증가, ui갱신
+        TextUIManager.instance.changeHeartText(); //슬롯 사용 횟수 증가, ui갱신
+
         itemCountInOneSlot = displayItemSlots[0].itemImage.Count - 3; //3개는 이미지 용이라서 사실 허상임.
         resultIndexArray = new int[slot.Length, itemCountInOneSlot]; //이거 현재는 3이랑 5다.
 
@@ -64,8 +68,8 @@ public class SlotMachineManager : MonoBehaviour
 
     public void SlotUsingCoin()
     {
-        TextUIManager.instance.slotUseCount++;
-        TextUIManager.instance.changeEnergyText(); //슬롯 사용 횟수 증가, ui갱신
+        TextUIManager.instance.AddSlotUseCount(); //슬롯 사용 횟수 증가, ui갱신
+        SoundManager.instance.SlotSoundPlay(); //슬롯버튼 사운드 재생
 
         SlotButton.interactable = false; //슬롯 시작되면 버튼 클릭 불가.
         itemBoxButton.interactable = false; //마찬가지로 슬롯 도중은 클릭 불가
@@ -132,43 +136,78 @@ public class SlotMachineManager : MonoBehaviour
                 }
                 yield return new WaitForSeconds(0.03f);  //슬롯은 각각 4초 돌 듯
             }
+            SoundManager.instance.StopSlotSoundPlay(); //점수 사운드 재생
             yield return new WaitForSeconds((1.4f / (slot.Length - 1)) * (slot.Length - slotIndex)); //0번이면 0.5곱하기 (2-0), 즉 1초 쉰다.
         }
 
         if (slotIndex == slot.Length - 1)
         {
             yield return new WaitForSeconds(0.2f);
-            checkAllResultSlotIsItem();  //전체를 본 후에 칸 별로 계산하기 위해 굳이 이렇게 함. 아이템별로 해야할 듯.
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-            checkAllResultSlotIsItem01();
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-            checkAllResultSlotIsItem02();
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-            checkAllResultSlotIsItem03();
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-            checkAllResultSlotIsItem04();
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-            checkAllResultSlotIsItem05();
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-            checkAllResultSlotIsItem06();
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-            checkAllResultSlotIsItem07();
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-            checkAllResultSlotIsItem08();
-            if (isScoreZero == false)
-                yield return new WaitForSeconds(1.0f);
-
+            if (true)
+            {
+                checkAllResultSlotIsItem();  //전체를 본 후에 칸 별로 계산하기 위해 굳이 이렇게 함. 아이템별로 해야할 듯.
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem01();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem02();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem03();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem04();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem05();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem06();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem07();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem08();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem09();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem10();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem11();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem12();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem13();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem14();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsItem15();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+                checkAllResultSlotIsBingo();
+                if (isScoreZero == false)
+                    yield return new WaitForSeconds(1.0f);
+            }
 
             yield return new WaitForSeconds(1.1f); //좀 더 기다린 후에 엔드 엑션
-            itemShopPanel.SetActive(true);
+            if (StageInfoManager.instance.StageHeart[StageInfoManager.instance.stageCount] - StageInfoManager.instance.slotUseCount <= 0 ||
+                StageInfoManager.instance.StageEnergy[StageInfoManager.instance.stageCount] - StageInfoManager.instance.energy <= 0 )
+            { //남은 생명이 0이거나 에너지가 스테이지 목표를 넘어가면
+                StageInfoManager.instance.StageClearCheck();
+            }
+            else
+            {
+                itemShopPanel.SetActive(true);
+            }
             SlotButton.interactable = true; //패널이 켜진 다음 버튼 클릭 다시 가능
             itemBoxButton.interactable = true;
         }
@@ -181,6 +220,7 @@ public class SlotMachineManager : MonoBehaviour
     public void ClickitemBoxButton()
     {
         itemBoxPanel.SetActive(true);
+        SoundManager.instance.ButtonSoundPlay(); //버튼 사운드 재생
     }
 
 
@@ -236,6 +276,24 @@ public class SlotMachineManager : MonoBehaviour
                     if (i < 2 &&(
                         itemInfoBackpack[resultIndexArray[i + 1, j]] > 0)) //오른쪽칸 검사
                         scoreAddResult += 5; //누군가 있으면 5점
+
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 3)) //윗칸 검사
+                        scoreAddResult += 10; //리코, 클로에 10점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 3)) //아래칸 검사
+                        scoreAddResult += 10; 
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 3)) //왼쪽칸 검사
+                        scoreAddResult += 10; 
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 3)) //오른쪽칸 검사
+                        scoreAddResult += 10; 
+
                     if (scoreAddResult != 0)
                         AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
                     scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
@@ -346,15 +404,19 @@ public class SlotMachineManager : MonoBehaviour
                         scoreAddResult += 8;
 
                     if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 12 ||
                         itemInfoBackpack[resultIndexArray[i, j - 1]] == 7)) //윗칸 검사
-                        scoreAddResult += 12; //코바야시가 있으면 12점 
+                        scoreAddResult += 12; //코바야시, 타케가 있으면 12점 
                     if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 12 ||
                         itemInfoBackpack[resultIndexArray[i, j + 1]] == 7)) //아래칸 검사
                         scoreAddResult += 12;
                     if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 12 ||
                         itemInfoBackpack[resultIndexArray[i - 1, j]] == 7)) //왼쪽칸 검사
                         scoreAddResult += 12;
                     if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 12 ||
                         itemInfoBackpack[resultIndexArray[i + 1, j]] == 7)) //오른쪽칸 검사
                         scoreAddResult += 12;
 
@@ -391,19 +453,19 @@ public class SlotMachineManager : MonoBehaviour
                     if (j > 0 && (
                         itemInfoBackpack[resultIndexArray[i, j - 1]] == 4 ||
                         itemInfoBackpack[resultIndexArray[i, j - 1]] == 6)) //윗칸 검사
-                        scoreAddResult -= 11; //엘마, 이루루가 있으면 -11점 
+                        scoreAddResult -= 13; //엘마, 이루루가 있으면 -11점 
                     if (j < 2 && (
                         itemInfoBackpack[resultIndexArray[i, j + 1]] == 4 ||
                         itemInfoBackpack[resultIndexArray[i, j + 1]] == 6)) //아래칸 검사
-                        scoreAddResult -= 11;
+                        scoreAddResult -= 13;
                     if (i > 0 && (
                         itemInfoBackpack[resultIndexArray[i - 1, j]] == 4 ||
                         itemInfoBackpack[resultIndexArray[i - 1, j]] == 6)) //왼쪽칸 검사
-                        scoreAddResult -= 11;
+                        scoreAddResult -= 13;
                     if (i < 2 && (
                         itemInfoBackpack[resultIndexArray[i + 1, j]] == 4 ||
                         itemInfoBackpack[resultIndexArray[i + 1, j]] == 6)) //오른쪽칸 검사
-                        scoreAddResult -= 11;
+                        scoreAddResult -= 13;
 
                     if (scoreAddResult != 0)
                         AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
@@ -424,16 +486,16 @@ public class SlotMachineManager : MonoBehaviour
                 {
                     if (j > 0 && (
                         itemInfoBackpack[resultIndexArray[i, j - 1]] == 7)) //윗칸 검사
-                        scoreAddResult += 20; //코바야시가 있으면 20점
+                        scoreAddResult += 17; //코바야시가 있으면 20점
                     if (j < 2 && (
                         itemInfoBackpack[resultIndexArray[i, j + 1]] == 7)) //아래칸 검사
-                        scoreAddResult += 20;
+                        scoreAddResult += 17;
                     if (i > 0 && (
                         itemInfoBackpack[resultIndexArray[i - 1, j]] == 7)) //왼쪽칸 검사
-                        scoreAddResult += 20;
+                        scoreAddResult += 17;
                     if (i < 2 && (
                         itemInfoBackpack[resultIndexArray[i + 1, j]] == 7)) //오른쪽칸 검사
-                        scoreAddResult += 20;
+                        scoreAddResult += 17;
 
                     if (j > 0 && (
                         itemInfoBackpack[resultIndexArray[i, j - 1]] == 5)) //윗칸 검사
@@ -465,6 +527,19 @@ public class SlotMachineManager : MonoBehaviour
             {
                 if (itemInfoBackpack[resultIndexArray[i, j]] == 7) //해당 칸이 코바야시일때
                 {
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] > 0)) //윗칸 검사
+                        scoreAddResult += 5; //누군가 있으면 5점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] > 0)) //아래칸 검사
+                        scoreAddResult += 5; //누군가 있으면 5점
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] > 0)) //왼쪽칸 검사
+                        scoreAddResult += 5; //누군가 있으면 5점
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] > 0)) //오른쪽칸 검사
+                        scoreAddResult += 5; //누군가 있으면 5점
+
                     if (j > 0 && (
                         itemInfoBackpack[resultIndexArray[i, j - 1]] == 5)) //윗칸 검사
                         scoreAddResult += 10; //토루가 있으면 10점
@@ -516,12 +591,300 @@ public class SlotMachineManager : MonoBehaviour
             }
         }
     }
+    void checkAllResultSlotIsItem09()
+    {
+        isScoreZero = true;
+        int scoreAddResult = 0;
+        for (int i = 0; i < slot.Length; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemInfoBackpack[resultIndexArray[i, j]] == 9) //해당 칸이 루코아일때
+                {
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 10)) //윗칸 검사
+                        scoreAddResult += 30; //쇼타가 있으면 30점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 10)) //아래칸 검사
+                        scoreAddResult += 30;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 10)) //왼쪽칸 검사
+                        scoreAddResult += 30;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 10)) //오른쪽칸 검사
+                        scoreAddResult += 30;
 
+                    if (scoreAddResult != 0)
+                        AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
+                    scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
+                }
+            }
+        }
+    }
+    void checkAllResultSlotIsItem10()
+    {
+        isScoreZero = true;
+        int scoreAddResult = 0;
+        for (int i = 0; i < slot.Length; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemInfoBackpack[resultIndexArray[i, j]] == 10) //해당 칸이 쇼타일때
+                {
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 9)) //윗칸 검사
+                        scoreAddResult += 20; //루코아가 있으면 9점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 9)) //아래칸 검사
+                        scoreAddResult += 20;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 9)) //왼쪽칸 검사
+                        scoreAddResult += 20;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 9)) //오른쪽칸 검사
+                        scoreAddResult += 20;
+
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 1 ||
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 3)) //윗칸 검사
+                        scoreAddResult += 3; //엘마, 이루루가 있으면 -11점 
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 1 ||
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 3)) //아래칸 검사
+                        scoreAddResult += 3;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 1 ||
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 3)) //왼쪽칸 검사
+                        scoreAddResult += 3;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 1 ||
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 3)) //오른쪽칸 검사
+                        scoreAddResult += 3;
+
+                    if (scoreAddResult != 0)
+                        AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
+                    scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
+                }
+            }
+        }
+    }
+    void checkAllResultSlotIsItem11()
+    {
+        isScoreZero = true;
+        int scoreAddResult = 0;
+        for (int i = 0; i < slot.Length; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemInfoBackpack[resultIndexArray[i, j]] == 11) //해당 칸이 죠지일때
+                {
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 7)) //윗칸 검사
+                        scoreAddResult += 25; //코바야시가 있으면 40점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 7)) //아래칸 검사
+                        scoreAddResult += 25;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 7)) //왼쪽칸 검사
+                        scoreAddResult += 25;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 2 ||
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 7)) //오른쪽칸 검사
+                        scoreAddResult += 25;
+
+                    if (scoreAddResult != 0)
+                        AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
+                    scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
+                }
+            }
+        }
+    }
+    void checkAllResultSlotIsItem12()
+    {
+        isScoreZero = true;
+        int scoreAddResult = 0;
+        for (int i = 0; i < slot.Length; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemInfoBackpack[resultIndexArray[i, j]] == 12) //해당 칸이 타케일때
+                {
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 4)) //윗칸 검사
+                        scoreAddResult += 10; //이루루 10점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 4)) //아래칸 검사
+                        scoreAddResult += 10;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 4)) //왼쪽칸 검사
+                        scoreAddResult += 10;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 4)) //오른쪽칸 검사
+                        scoreAddResult += 10;
+
+                    if (scoreAddResult != 0)
+                        AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
+                    scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
+                }
+            }
+        }
+    }
+    void checkAllResultSlotIsItem13()
+    {
+        isScoreZero = true;
+        int scoreAddResult = 0;
+        for (int i = 0; i < slot.Length; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemInfoBackpack[resultIndexArray[i, j]] == 13) //해당 칸이 토루일때
+                {
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 8)) //윗칸 검사
+                        scoreAddResult += 5; //파프닐5점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 8)) //아래칸 검사
+                        scoreAddResult += 5;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 8)) //왼쪽칸 검사
+                        scoreAddResult += 5;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 8)) //오른쪽칸 검사
+                        scoreAddResult += 5;
+
+                    if (scoreAddResult != 0)
+                        AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
+                    scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
+                }
+            }
+        }
+    }
+    void checkAllResultSlotIsItem14()
+    {
+        isScoreZero = true;
+        int scoreAddResult = 0;
+        for (int i = 0; i < slot.Length; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemInfoBackpack[resultIndexArray[i, j]] == 14) //해당 칸이 찹쌀떡일때
+                {
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] > 0)) //윗칸 검사
+                        scoreAddResult += 10; //뭐든지10점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] > 0)) //아래칸 검사
+                        scoreAddResult += 10;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] > 0)) //왼쪽칸 검사
+                        scoreAddResult += 10;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] > 0)) //오른쪽칸 검사
+                        scoreAddResult += 10;
+
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 6)) //윗칸 검사
+                        scoreAddResult += 10; //엘마, 이루루가 있으면 -11점 
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 6)) //아래칸 검사
+                        scoreAddResult += 10;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 6)) //왼쪽칸 검사
+                        scoreAddResult += 10;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 6)) //오른쪽칸 검사
+                        scoreAddResult += 10;
+
+                    if (scoreAddResult != 0)
+                        AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
+                    scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
+                }
+            }
+        }
+    }
+    void checkAllResultSlotIsItem15()
+    {
+        isScoreZero = true;
+        int scoreAddResult = 0;
+        for (int i = 0; i < slot.Length; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemInfoBackpack[resultIndexArray[i, j]] == 15) //해당 칸이 토루꼬리일때
+                {
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] > 0)) //윗칸 검사
+                        scoreAddResult += 15; //뭐든지 15점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] > 0)) //아래칸 검사
+                        scoreAddResult += 15;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] > 0)) //왼쪽칸 검사
+                        scoreAddResult += 15;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] > 0)) //오른쪽칸 검사
+                        scoreAddResult += 15;
+
+                    if (j > 0 && (
+                        itemInfoBackpack[resultIndexArray[i, j - 1]] == 7)) //윗칸 검사
+                        scoreAddResult -= 10; //코바야시 -10점
+                    if (j < 2 && (
+                        itemInfoBackpack[resultIndexArray[i, j + 1]] == 7)) //아래칸 검사
+                        scoreAddResult -= 10;
+                    if (i > 0 && (
+                        itemInfoBackpack[resultIndexArray[i - 1, j]] == 7)) //왼쪽칸 검사
+                        scoreAddResult -= 10;
+                    if (i < 2 && (
+                        itemInfoBackpack[resultIndexArray[i + 1, j]] == 7)) //오른쪽칸 검사
+                        scoreAddResult -= 10;
+
+                    if (scoreAddResult != 0)
+                        AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
+                    scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
+                }
+            }
+        }
+    }
+    void checkAllResultSlotIsBingo()
+    {
+        isScoreZero = true;
+        int scoreAddResult = 0;
+        for (int i = 0; i < slot.Length; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemInfoBackpack[resultIndexArray[i, j]] > 0)
+                {
+                    if ((itemInfoBackpack[resultIndexArray[i, 0]] == itemInfoBackpack[resultIndexArray[i, 1]]) &&
+                            (itemInfoBackpack[resultIndexArray[i, 1]] == itemInfoBackpack[resultIndexArray[i, 2]]))
+                        scoreAddResult += 50; //뭐든지 50점
+                    if ((itemInfoBackpack[resultIndexArray[0, j]] == itemInfoBackpack[resultIndexArray[1, j]]) &&
+                            (itemInfoBackpack[resultIndexArray[1, j]] == itemInfoBackpack[resultIndexArray[2, j]]))
+                        scoreAddResult += 50; //뭐든지 50점
+                    if (scoreAddResult != 0)
+                        AddScoreByUIManager(displayItemSlots[i].itemImage[j].gameObject, scoreAddResult);
+                    scoreAddResult = 0; //사용이 끝났으니까 바로 0으로
+                }
+            }
+        }
+    }
 
     void AddScoreByUIManager(GameObject obj, int score)
     {
         TextUIManager.instance.AddEnergy(score);
         TextUIManager.instance.makeTextEffectSlotScore(obj, score);
         isScoreZero = false; //점수가 출력됐다면 그 라인은 아무튼 점수가 0점이 아니니까 여기 넣음.
+
+        if (score >= 50)
+            SoundManager.instance.JackPotSoundPlay(); //점수 사운드 재생
+        else
+            SoundManager.instance.ScoreUpSoundPlay(); //점수 사운드 재생
     }
 }
